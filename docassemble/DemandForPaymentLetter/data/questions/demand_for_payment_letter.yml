@@ -433,13 +433,13 @@ subquestion: |
 table: other_parties.table
 rows: other_parties
 columns:
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""  
   - Address: |
       row_item.address.block() if defined("row_item.address.address") else ""
-  - Name: |
-      row_item.name.full() if defined("row_item.name.first") else ""
 edit:
-  - address.address
   - name.first
+  - address.address
 confirm: True
 
 ---
