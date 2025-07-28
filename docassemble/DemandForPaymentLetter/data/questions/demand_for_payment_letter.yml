@@ -1,0 +1,497 @@
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+  - docassemble.GithubFeedbackForm:embedded_review.yml
+#---
+#modules:
+#  - docassemble.GithubFeedbackForm.github_issue
+#---
+#default screen parts:
+#  footer: |
+#    [:comment-dots: Feedback](${ feedback_link(user_info(), github_repo="docassemble-DemandForPaymentLetter") } ){:target="_blank"}
+---
+metadata:
+  title: >-
+    Demand for payment letter
+#  subtitle: >-
+#    LawHelpMN
+  short title: >-
+    Demand for payment letter 
+  description: |-
+    Demand for payment letter
+  before_you_start: |
+    Before you get started, you need to...
+  maturity: production
+  estimated_completion_minutes: 10
+  estimated_completion_delta: 5
+  tags: 
+    - Money & Debt
+  authors:
+    - Court Forms Online
+#  show login: true
+  original_form: []
+  original_form_published_on: ""
+  allowed_courts: []
+  typical_role: "na"
+  al_weaver_version: "1.11.0"
+  generated_on: "2025-05-19"
+  languages:
+    - en
+  jurisdiction: NAM-US-US+MN
+  review_date: 2025-05-19
+  form_titles:
+    - Demand for payment letter
+  form_numbers: []
+  update_notes: |
+---
+code: |
+  # This controls the default country and list of states in address field questions
+  AL_DEFAULT_COUNTRY = "US"
+---
+code: |
+  # This controls the default state in address field questions
+  AL_DEFAULT_STATE = "MN"
+---
+code: |
+  github_repo_name = "docassemble-DemandForPaymentLetter"
+---
+code: |
+  interview_short_title = "Write a Demand for payment letter"
+---
+code: |
+  al_form_type = "letter" 
+---
+objects:
+  - users: ALPeopleList.using(complete_attribute='complete', ask_number=True,target_number=1)
+  - other_parties: ALPeopleList.using(ask_number=True,target_number=1)
+---
+features:
+  navigation: True
+  progress bar: True
+---
+sections:
+  - Introduction
+  - Your Information:
+    - Name
+    - Address
+    - Phone Number
+    - Email Address
+  - Opposing Party Information:
+    - Opposing Party Name
+    - Opposing Party Address
+  - Loan Information
+---
+#################### Interview order #####################
+comment: |
+  Controls order and branching logic for questions specific to this form
+id: interview_order_demand_for_payment_letter
+code: |
+  # Set the allowed courts for this interview
+  nav.set_section("display=True")
+  user_role = "na"
+  user_ask_role = "na"
+  set_progress(25)
+  users_name
+  #users.gather()
+  #set_parts(subtitle=str(users))
+  users_address
+  users_phone
+  users_email
+  #users[0].address.address
+  #users[0].phone_number
+  #users[0].email
+  set_progress(50)
+  other_parties.gather()
+  other_parties[0].address.address
+  set_progress(75)
+  date_of_loan
+  amount_owed
+  description_of_loan
+  if payback_agreement == True:
+    payback_date 
+  else:
+    payment_demand_date 
+  payment_demand_date 
+  payment_method 
+  set_progress(100)
+  basic_questions_signature_flow
+  interview_order_demand_for_payment_letter = True
+---
+###################### Main order ######################
+comment: |
+  This block includes the logic for standalone interviews.
+  Delete mandatory: True to include in another interview
+mandatory: True
+code: |
+  al_intro_screen
+  demand_for_payment_letter_intro
+  interview_order_demand_for_payment_letter
+  signature_date
+  # Store anonymous data for analytics / statistics
+  store_variables_snapshot(
+      persistent=True,
+      data={
+          "zip": showifdef("users[0].address.zip"),
+          "reached_interview_end": True,
+      },
+  )
+  demand_for_payment_letter_download
+---
+id: Demand_for_payment_letter
+continue button field: demand_for_payment_letter_intro
+question: |
+  Demand for payment letter
+subquestion: |
+  If someone owes you money and has not paid you back, use this interview to create a "demand letter" that says they must pay you the money they owe. 
+  
+  Sending a demand letter is usually a good step to take before filing a Conciliation Court case. For more information, see the <a href="https://www.lawhelpmn.org/self-help-library/fact-sheet/conciliation-court" title="https://www.lawhelpmn.org/self-help-library/fact-sheet/conciliation-court">Conciliation Court fact sheet</a> on <a href="https://www.lawhelpmn.org/", title="https://www.lawhelpmn.org/">LawHelpMN.org</a>. 
+  
+  Most people take about 5 minutes to complete this interview.
+section: Introduction
+---
+code: |
+  users[i].name.first
+  users[i].name.last
+  users[i].name.middle
+  users[i].name.suffix
+  users[i].address.address
+  users[i].phone_number
+  users[i].email
+  users[i].complete = True
+---
+continue button field: users_name
+id: User name
+question: |
+  What is your name?
+fields:
+  - code: |
+      users[0].name_fields()
+section: Name
+---
+continue button field: users_address
+id: users address
+question: |
+  What is your address?
+fields:
+  - code: |
+      users[0].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
+section: Address
+---
+continue button field: users_phone
+id: user phone number
+question: |
+  What is your phone number?
+fields:  
+  - Phone number: users[0].phone_number
+
+validation code: |
+  import re
+  
+  digits = re.sub(r'\D', '', users[0].phone_number)
+
+  if len(digits) != 10:
+    validation_error("Please enter a phone number in the format (xxx) xxx-xxxx", field="phone_number")
+
+  users[0].phone_number = f"({digits[0:3]}) {digits[3:6]}-{digits[6:10]}"
+
+#validation code: |
+#  if not phone_number_is_valid(users[0].phone_number):
+#    validation_error("Please enter a phone number in the format (xxx) xxx-xxxx", field="phone_number")
+#  phone_number = phone_number_formatted(users[0].phone_number)
+section: Phone Number
+---
+continue button field: users_email
+id: user email address
+question: |
+  What is your email address?
+fields:
+  - Email address: users[0].email
+    required: False
+section: Email Address
+---
+sets:
+  - other_parties[i].name.first
+  - other_parties[i].name.last
+  - other_parties[i].name.middle
+  - other_parties[i].name.suffix
+id: names of opposing parties
+question: |
+  % if user_started_case:
+  Name of the person or company that owes you money
+  % else:
+  Name of ${ ordinal(i) } **plaintiff** or petitioner in this matter
+  % endif
+fields:
+  - code: |
+      other_parties[i].name_fields(person_or_business='unsure')
+section: Opposing Party Name
+---
+sets:
+  - x.address.address
+  - x.address.city
+  - x.address.zip
+  - x.address.unit
+  - x.address.state
+  - x.address.country
+id: persons address
+generic object: ALIndividual
+question: |
+  What is ${ x.possessive('address') }?
+fields:
+  - code: |
+      x.address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
+section: Opposing Party Address
+---
+id: Date of loan
+question: |
+  When did the person start owing you money?  
+subquestion: |
+  For example: 
+  
+  - If you loaned them money, on what date did you loan them money?  
+  - If they agreed to pay you for your services, when did you complete the work? 
+  - If they damaged your property, when did the damage happen? 
+fields:
+  - "Date": date_of_loan
+    datatype: date
+Section: Loan Information
+---
+id: Amount owed
+question: |
+  What amount does ${ other_parties[0].name.first } owe you?
+fields:
+  - "no label": amount_owed
+    datatype: currency
+    min: 0
+Section: Loan Information
+---
+id: description of loan
+question: |
+  Explain why they owe you money.
+subquestion: |
+  Write the description so it makes sense in this sentence: 
+
+  You owe me ${ currency(amount_owed) } because on ${ date_of_loan }, **your description___.**  
+fields:
+  - "no label": description_of_loan
+    input type: area
+Section: Loan Information
+---
+id: payback_agreement
+question: |
+  Did ${ other_parties[0].name.first } promise to pay you by a certain date?
+fields:
+  - "no label": payback_agreement
+    datatype: radio
+    choices:
+      - Yes
+      - No
+  - "Promised payment date": payback_date
+    datatype: date
+    show if:
+      variable: payback_agreement
+      is: Yes
+Section: Loan Information
+---
+id: payment demand
+question: |
+  When and how should the letter say they need to pay you?
+fields:
+  - "Payment date": payment_demand_date
+    datatype: date
+    #label above field: True
+  - "Payment method": payment_method
+    hint: e.g. by money order OR check, etc.
+    #label above field: True
+Section: Loan Information
+---
+id: Other parties address address
+question: |
+  Other parties.address.address
+fields:
+  - "Other parties.address.address": other_parties.address.address
+  - "Users.phone number": users.phone_number
+---
+id: Users address address
+question: |
+  Users.address.address
+fields:
+  - "Users.address.address": users.address.address
+  - "Users.email": users.email
+---
+mandatory: True
+question: |
+  Give us your feedback
+subquestion: |
+  ${ only_once_review_widget() }
+---
+id: preview demand_for_payment_letter
+question: |
+  Preview your form before you sign it
+subquestion: |
+  Here is a preview of the form you will sign on the next page.   
+  
+  ${ al_recipient_bundle.as_pdf(key='preview') }
+
+  Click the image to open it in a new tab. Click the "Edit answers" button
+  to edit your answers.
+
+  ${ action_button_html(url_action('review_demand_for_payment_letter'), label='Edit answers', color='info') }
+  
+  Remember to come back to this window to continue and sign your form.
+continue button field: demand_for_payment_letter_preview_question    
+---
+code: |
+  signature_fields = ['users[0].signature']
+---
+id: demand for payment letter review screen
+event: review_demand_for_payment_letter
+question: |
+  Review your answers
+review:
+  - Edit: users.revisit
+    button: |
+      **Users**
+
+      % for item in users:
+        * ${ item }
+      % endfor
+  - Edit: amount_owed
+    button: |
+      **Amount owed**:
+      ${ currency(amount_owed) }
+  - Edit: payback_date
+    button: |
+      **Date of Payback**:
+      ${ payback_date }
+  - Edit: date_of_loan
+    button: |
+      **Date of loan**:
+      ${ date_of_loan }
+  - Edit: other_parties.revisit
+    button: |
+      **Other parties**
+
+      % for item in other_parties:
+        * ${ item }
+      % endfor
+  - Edit: payment_demand_date
+    button: |
+      **Date of Payment demand**:
+      ${ payment_demand_date }
+  - Edit: payback_agreement
+    button: |
+      **Payback agreement**:
+      ${ word(yesno(payback_agreement)) }
+  - Edit: payment_method
+    button: |
+      **Payment method**:
+      ${ payment_method }
+  - Edit: description_of_loan
+    button: |
+      **Description of loan**:
+      > ${ single_paragraph(description_of_loan) }
+---
+continue button field: users.revisit
+question: |
+  Edit users
+subquestion: |
+  ${ users.table }
+
+  ${ users.add_action() }
+---
+table: users.table
+rows: users
+columns:
+  - Address: |
+      row_item.address.block() if defined("row_item.address.address") else ""
+  - Phone number: |
+      row_item.phone_number if defined("row_item.phone_number") else ""
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""
+  - Email: |
+      row_item.email if defined("row_item.email") else ""
+  - Signature: |
+      row_item.signature if defined("row_item.signature") else ""
+edit:
+  - address.address
+  - phone_number
+  - name.first
+  - email
+  - signature
+confirm: True
+
+---
+continue button field: other_parties.revisit
+question: |
+  Edit other_parties
+subquestion: |
+  ${ other_parties.table }
+
+  ${ other_parties.add_action() }
+---
+table: other_parties.table
+rows: other_parties
+columns:
+  - Address: |
+      row_item.address.block() if defined("row_item.address.address") else ""
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""
+edit:
+  - address.address
+  - name.first
+confirm: True
+
+---
+id: download demand_for_payment_letter
+event: demand_for_payment_letter_download
+question: |
+  All done
+subquestion: |
+  Thank you ${users}. Your form is ready to download and deliver.
+  
+  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
+
+  ${ action_button_html(url_action('review_demand_for_payment_letter'), label='Edit answers', color='info') }
+  
+  
+  ${ al_user_bundle.download_list_html() }
+  
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
+
+progress: 100
+---
+# ALDocument objects specify the metadata for each template
+objects:
+  - demand_for_payment_letter_Post_interview_instructions: ALDocument.using(title="Instructions", filename="demand_for_payment_letter_next_steps.docx", enabled=True, has_addendum=False)
+  - demand_for_payment_letter_attachment: ALDocument.using(title="Demand for payment letter", filename="Demand_for_Payment_letter_FINAL.docx", enabled=True, has_addendum=False, )
+---
+# Bundles group the ALDocuments into separate downloads, such as for court and for the user
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[demand_for_payment_letter_Post_interview_instructions, demand_for_payment_letter_attachment], filename="Demand_for_Payment_letter_FINAL.docx", title="All forms to download for your records", enabled=True)
+  - al_recipient_bundle: ALDocumentBundle.using(elements=[demand_for_payment_letter_attachment],  filename="Demand_for_Payment_letter_FINAL.docx", title="All forms to file", enabled=True)
+---
+# Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
+# used for "preview" and "final" keys, and logic in the template checks the value of 
+# `i` to show or hide the user's signature
+attachment:
+  name: Post-interview-Instructions
+  filename: demand_for_payment_letter_next_steps
+  docx template file: demand_for_payment_letter_final_next_steps.docx
+  variable name: demand_for_payment_letter_Post_interview_instructions[i]
+  skip undefined: True
+  tagged pdf: True
+---
+attachment:
+  name: demand for payment letter 
+  filename: demand_for_payment_letter
+  variable name: demand_for_payment_letter_attachment[i]
+  skip undefined: True
+  docx template file: Demand_for_Payment_letter_FINAL.docx
+  tagged pdf: True
+  fields:
+    - user: ${ users[0] }
+    - "users1_signature": ${ users[0].signature }
+
+
