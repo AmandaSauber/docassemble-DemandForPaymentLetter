@@ -13,8 +13,6 @@ include:
 metadata:
   title: >-
     Demand for payment letter
-#  subtitle: >-
-#    LawHelpMN
   short title: >-
     Demand for payment letter 
   description: |-
@@ -24,8 +22,8 @@ metadata:
   maturity: production
   estimated_completion_minutes: 10
   estimated_completion_delta: 5
-  tags: 
-    - Money & Debt
+#  tags: 
+#    - Money & Debt
   authors:
     - Court Forms Online
 #  show login: true
@@ -64,6 +62,7 @@ code: |
 objects:
   - users: ALPeopleList.using(complete_attribute='complete', ask_number=True,target_number=1)
   - other_parties: ALPeopleList.using(ask_number=True,target_number=1)
+  - al_logo: DAStaticFile.using(filename="MNfavicon-96x96.png", alt_text="LawHelpMN")
 ---
 features:
   navigation: True
@@ -297,7 +296,7 @@ id: payment demand
 question: |
   When and how should the letter say they need to pay you?
 fields:
-  - "Payment date": payment_demand_date
+  - "Payment due date": payment_demand_date
     datatype: date
     #label above field: True
   - "Payment method": payment_method
