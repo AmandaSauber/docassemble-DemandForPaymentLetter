@@ -1,0 +1,574 @@
+############# TAKEN FROM MLH AS A GUIDE - NEEDS UPDATING FOR LAWHELPMN ###############
+######################################################################################
+
+##################################### INCLUDE ########################################
+### Add this block and items in this list as needed per interview 
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+  - docassemble.LawHelpMNFramework:lawhelpmn_basic_questions.yml
+#  - lawhelpmn_cover_sheet.yml ### NEED TO CREATE THIS FILE - this is a word doc that's included in the Templates section for MI ###
+  - docassemble.LawHelpMNFramework:lawhelpmn_terms_of_use.yml 
+#  - lawhelpmn_visual_custom_error_action.yml ### FILE CREATED BUT NOT YET INCLUDED IN THE PACKAGE - IN DRAFT FORM!
+  - docassemble.LawHelpMNFramework:MN_Courts.yml # Do I need this as an 'include'? I add the courts code via an objects block.. does adding it as an include streamline adding it as an object and elsewhere throughout the code in an interview? 
+  
+#################################### MODULES #########################################
+### Add modules as needed to individual interviews 
+---
+modules:
+  - docassemble.demo.accordion # for review screen accordions
+  - docassemble.AssemblyLine.al_courts ## DO I ACTUALLY NEED THIS FOR MY COURT CODE TO WORK??
+
+#################################### FEATURES ########################################
+### Add this block to individual interviews 
+---
+features:
+  bootstrap theme: LHBranding_bootstrap.min.css
+  progress bar: True
+  show progress bar percentage: True
+  progress bar method: default
+
+#################################### OBJECTS #########################################
+### Add objects as needed to individual interviews. 
+---
+objects:
+  - al_logo: DAStaticFile.using(filename="MNfavicon-96x96.png", alt_text="LawHelpMN") # add to all interviews 
+  - the_courts: ALCourtLoader.using(file_name='Courts.xlsx')
+  - alias_name: |
+      DAList.using(object_type=Individual,there_are_any=True)
+  - users: DAList.using(object_type=ALIndividual, ask_number=True, target_number=1) ## Select one ##
+  - users: ALPeopleList.using(complete_attribute='complete', ask_number=True,target_number=1)  ## Select one ##
+  - other_parties: ALPeopleList.using(target_number=1, ask_number=True)
+  - attorneys: ALPeopleList.using(there_is_another=False)
+  - server: ALIndividual
+---
+################################ ORG LEVEL VARIABLES #################################
+# These blocks define Assembly Line-level variables that will most likely be consistent throughout the portfolio. Add to individual interviews as needed.
+code: |
+  AL_DEFAULT_COUNTRY = "US" # default country and list of states in address fields
+---
+code: |
+  AL_DEFAULT_STATE = "MN"     # default state in address fields
+---
+code: |
+  AL_ORGANIZATION_HOMEPAGE = get_config('app homepage', 'https://www.lawhelpmn.org/forms')    # Used to set the exit url that you will be taken to if you click the title in the navigation bar.
+---
+code: |
+  AL_ORGANIZATION_TITLE = "LawHelpMN"   # Used to set the organization title (which appears above the interview title) in the navigation bar. 
+  
+#  Add this to the interview code when the header still shows "Minnesota Court Forms Online". This should be overriding in the config file to be "LawHelpMN", but it appears that this is not always the case. This can be overridden in the individual interview files by applying this code block. 
+---
+code: |
+  AL_DEFAULT_OVERFLOW_MESSAGE = " [CONTINUED ON ATTACHMENT.]"  # Used to control the text displayed in an input box when text is too long to fit on a PDF. The default is ... if not specified.
+  
+---
+###### The below LawHelpMN Organization-level variables that will vary from interview to interview. Add these blocks as needed to individual interviews ######   
+
+# Add this block to all interviews. See note below for customizing this code.
+code: |
+  github_repo_name = "docassemble-XXXX"   
+## Replace XXXX with the name of your package (i.e. 'docassemble-AnswerToComplaintAos')
+
+---
+                        ### Add as needed per interview  ###
+code: |
+  LawHelpMN_instructions_included = True  # Asks if there are instructions generated with the form(s)/letter(s)
+---
+code: |
+  LawHelpMN_multiple_forms = True         # Asks if the interview produces multiple forms
+---
+code: |
+  LawHelpMN_court_forms = True             # Asks if the interview creates forms that need to be filed with the court
+---
+code: |
+  LawHelpMN_form_type = "form(s)"          # form / forms / letter (for use in intro/outro pages)
+---
+code: |
+  LawHelpMN_time_min = 10
+  LawHelpMN_time_max = 45
+---
+code: |
+  LawHelpMN_materials_included = False      # Asks if a list of items/info needs to be gathered in order to complete the interview
+---
+###### The following variables can be used to quickly and consistently include common links and language. ###### SHOULD THESE BE CODE BLOCKS??
+code: |  
+  LAWHELPMN_GUIDE = "[Your Legal Guide](https://www.lawhelpmn.org/#main-container)"
+---
+code: |
+  LAWHELPMN_PROVIDERS_AND_CLINICS = "[You can use the Providers & Clinics tool to search for a lawyer or legal services in your area.](https://www.lawhelpmn.org/providers-and-clinics)"
+---
+############ This will get the docassemble-level metadata short title ################
+
+metadata:  
+  interview_short_title = all_variables(special='metadata').get('short title')
+  interview_title = all_variables(special='metadata').get('title')
+  
+---
+#################################### TEMPLATES #######################################
+
+# Relates to the code block: 'LawHelpMN_materials_included = False' above
+template: LawHelpMN_materials              # default list of info./items needed to complete the interview. Keep as bulleted list if replacing in individual interviews.
+content: |
+  To complete this interview, you will need:
+
+  * Information about yourself (i.e. contact information)
+  * Information about your legal issue
+  * Information about the people involved (i.e. co-users, opposing parties, attorneys, etc.)
+  * Information about your court case    # Apply this when there is an existing court case
+  * Any relevant documents or photos you might need to provide 
+
+### Templates can also be used to provide instructional information when there's a lot of text to include. Templates will appear as an expandable section, highlighted in green text. Here's the structure to use:
+
+# template: [template_variable_name]
+# subject: |
+#    Text of your title that will appear on the exandable bar
+# content: |
+#    The body of your content (i.e. instructions).
+
+############################# REVIEW AND EDIT ANSWERS ################################
+---
+mandatory: true
+code: |
+  review_empty_explainer = "This page starts out blank. As you answer questions, they will show up here. Then you can edit your answers."
+  review_accordion_explainer = "Click on the section titles to expand the section and edit answers."  ## Incorporate this when using accordions on review screens ## 
+  
+---
+############################## SIGN IN / SIGN UP ACTIONS #############################
+
+# Overrides what's in al_visual.yml 
+default screen parts:  
+  exit link: exit                    # sets behavior of Exit buttons
+  exit url: https://www.lawhelpmn.org/
+  right: |
+    ✎ [Review / Edit Answers](${ url_action('review_full') })
+  under: |
+    % if not user_logged_in():
+    [:key: Sign in](${url_of('login', next=interview_url())}) or [sign up](${url_of('register', next=interview_url())}) to save your progress. You can use this program without signing in, but your information is NOT saved. You can't come back to it later unless you sign in.
+    % endif
+  footer: |
+    [:share-alt-square: Share](${ url_ask([{'undefine': ['al_sharing_type','al_how_share_link']}, 'al_share_form_screen', {'recompute': ['al_did_share_form']}, 'al_share_results']) }){:target="_blank"}
+    [:info-circle: About](${ url_action('about_this_interview') }){:target="_blank"}   ### NEED TO CREATE THIS ABOUT FILE ####
+    footer: |
+    [:comment-dots: Feedback](${ feedback_link(user_info(), i="docassemble.lawhelpmnframework:feedback.yml", github_repo=github_repo_name) } ){:target="_blank"}  
+  short logo: |
+    <span class="title-container">
+      <span class="al-logo">
+        <img src="${ al_logo.url_for() }" alt="${ al_logo.alt_text }"/>
+      </span>
+      <span class="al-title-short">
+        <span class="title-row-1">${ all_variables(special='metadata').get('short title','').rstrip() }</span>
+      </span>
+    </span>
+  back button color: secondary
+---
+# creates a template for adding a sign-in message back to "under" screen part if needed
+template: sign_in_message
+content: |
+  % if not user_logged_in():
+    [:key: Sign in](${url_of('login', next=interview_url())}) or [sign up](${url_of('register', next=interview_url())}) to save your progress.
+  % endif
+ ---
+###### NOT SURE I NEED THIS?? ######
+# To create consistent language on generic continue buttons. If it is ever decided to change that language, it only need to be done here.
+# This is also useful for referring to a button label within page text. For example: “Just click the ${LawHelpMN_continue_button_label} button to save your progress.”
+mandatory: true
+code: |
+  LawHelpMN_continue_button_label = "Continue"
+  LawHelpMN_back_button_label = "Undo"
+
+  set_parts(continue_button_label = LawHelpMN_continue_button_label, back_button_label = LawHelpMN_back_button_label) 
+  
+---
+############################### WELCOME MESSAGE ######################################
+## Need to replace the al_intro_screen in the Main Interview Order block of each interview with my own created intro screen (that includes the Terms of Use).
+
+# Replace 'basic questions intro screen' (i.e. al_intro_screen) (from ql_baseline.yml) with this code.
+
+# default welcome info. to be included before any specific intro details about the individual interview. 
+template: LawHelpMN_welcome_message     
+content: |
+  Welcome to the ${ LawHelpMN_interview_short_title } interview.
+
+  This interview will help you prepare your ${ LawHelpMN_form_type } and give you next steps.  
+
+  This interview does not give legal advice. Using this program does not mean you have an attorney-client relationship.
+
+  You alone are responsible for the outcome of your case. If you need legal advice, you should contact a lawyer. Find [your local legal aid provider](https://www.lsc.gov/what-legal-aid/find-legal-aid).
+
+# Interview specific intro would go here, following the welcome message
+
+---  
+# # # # # # # # # # # # # # # # Standard Intro Pages # # # # # # # # # # # # # # # # #
+---
+# LawHelpMN standard intro pages
+# Simply make a reference to the LawHelpMN_standard_intro_pages variable in an interview's main Interview Order block in order to bring in these standard intro pages. 
+code: |
+  LawHelpMN_agree_terms
+  LawHelpMN_intro_landing
+  LawHelpMN_intro_navigate_save
+  LawHelpMN_standard_intro_pages = True
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+# The blocks below are the standard intro pages for all LawHelpMN tools.
+# Any of these pages can be overridden in an interview's custom yml file by creating a question block that uses the respective continue button field for its own continue button field.
+
+---
+################### THIS WILL BE MOVING TO A SEPARATE YML FILE ######################
+id: terms of use       
+question: |
+  Terms of Use and Privacy Policy
+fields:
+  - note: |          
+      Please review the Terms of Use and Privacy Policy:
+      ${ display_template(LawHelpMN_terms_of_use, scrollable=True) } 
+  - I agree to the Terms of Use and Privacy Policy: i_understand
+    datatype: checkboxes
+    none of the above: False    
+    minlength: 1
+    choices:
+      - I understand and wish to continue
+    validation messages:
+      minlength: |
+        You must accept the Terms of Use and Privacy Policy to continue.  
+continue button field: LawHelpMN_agree_terms   
+
+---
+# This can be used as the very first screen for an interview, following the welcome message and terms of use.
+id: LawHelpMN intro landing FirstScreen
+question: |
+  ${ LawHelpMN_interview_short_title }
+subquestion: |
+  ${ LawHelpMN_welcome_message }
+  
+  It will probably take about **${ LawHelpMN_time_min } to ${ LawHelpMN_time_max } minutes** to answer all the questions.
+  % if LawHelpMN_materials_included:
+  
+    To fill out your forms **you will need:**
+    
+    ${ LawHelpMN_materials }
+  % endif
+  
+  Your personalized ${ LawHelpMN_form_type } will be ready after you answer all the questions. 
+  % if LawHelpMN_instructions_included:
+    You will also get instructions for what to do next with your ${ LawHelpMN_form_type }.
+  % endif
+continue button field: LawHelpMN_intro_landing
+
+--- 
+if: user_logged_in()
+id: LawHelpMN intro saving answers logged in
+question: |
+  Using this tool
+subquestion: |
+  <h2 class="h5">Changing an Answer</h2>
+  If you make a mistake, you can use the **${ LawHelpMN_back_button_label }** button below to go back. You can also see and edit earlier answers by clicking the "✎ Review / Edit" link on the left.
+  
+  <h2 class="h5">Saving Your Work</h2>
+  You are already signed in. Just click the **${LawHelpMN_continue_button_label}** button to save your progress. 
+  
+  Go to the menu at the top of the screen and select “My Forms” to go back to a saved form.
+  
+#  <h2 class="h5">Help Text</h2>
+#  Click {green underlined words} for a definition or more information.   
+#terms:
+#  green underlined words: |
+#    More information appears when you click the green underlined words.
+continue button field: LawHelpMN_intro_navigate_save
+---
+if: not user_logged_in()
+id: LawHelpMN intro saving answers logged out
+question: |
+  Using this tool
+subquestion: |
+  <h2 class="h5">Changing an Answer</h2>
+  If you make a mistake, you can use the **${ LawHelpMN_back_button_label }** button below to go back. You can also see and edit earlier answers by clicking the "✎ Review / Edit" link on the left.
+  
+  <h2 class="h5">Saving Your Work</h2>
+  To save your work, sign in or sign up for an account. Click the "Sign in" or "Sign up" link below the **Continue** button. Or go to the
+  % if device().is_mobile:
+  :bars:
+  % endif
+  **menu** at the top of the screen and click "Sign in or sign up to save answers".
+  
+  To go back to a saved form, log in. Then go to the menu at the top of the screen and select “My Forms.”
+  
+#  <h2 class="h5">Help Text</h2>
+#  click {green underlined words} for a definition or more information. 
+#terms:
+#  green underlined words: |
+#    More information appears when you click the green underlined words.
+continue button field: LawHelpMN_intro_navigate_save
+
+# # # # # # # # # # # # # # # # Standard Outro Pages # # # # # # # # # # # # # 
+---
+# LawHelpMN standard outro pages
+# Simply make a reference to the LawHelpMN_standard_outro_pages variable in an interview's main Interview Order block in order to bring in these standard outro pages. Or, reference and/or override each block individually.
+code: |
+  if LawHelpMN_court_forms:
+    LawHelpMN_outro_filing_information    
+ # if LawHelpMN_esign_supported:        
+ #   LawHelpMN_esign
+ #   if LawHelpMN_esign:
+ #     signature_date
+  LawHelpMN_outro_saving_answers
+  LawHelpMN_standard_outro_pages = True
+
+  ### ### consider adding a variable to assess whether e-signature is applicable. If yes, show DA signature code, and if No, then skip the DA signature code, forcing the user to sign manually.
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# The blocks below are the standard outro pages for all LawHelpMN tools.
+# Any of these pages can be overridden in an interview's custom yml file by creating a question block that uses the respective 'continue button field' for its own continue button field.
+---
+id: LawHelpMN outro filing information
+question: |
+  This website **does not file** your ${ LawHelpMN_form_type }.
+subquestion: |
+  **You need to file** your ${ LawHelpMN_form_type } at court in person, by mail, e-mail, or by e-filing. Contact your court to find out how you can file. 
+  
+  ${ collapse_template(filing_info_template) }
+  % if LawHelpMN_multiple_forms:
+  
+    This tool produces multiple forms for your case. On the download page at the end of this tool, **download and save all the forms**.
+  % endif
+  % if LawHelpMN_instructions_included:
+  % if LawHelpMN_multiple_forms:
+    Read the instructions that come with your forms for more information, including when to file each form.
+  % else:
+    Read the instructions that come with your forms for more information.
+  % endif
+  % endif
+continue button field: LawHelpMN_outro_filing_information
+progress: 97
+  
+---
+if: user_logged_in()
+code: |
+  LawHelpMN_outro_saving_answers = True
+---
+if: not user_logged_in()
+id: LawHelpMN outro saving answers logged out
+question: |
+  Saving your answers
+subquestion: |
+  You can save your answers so that you can come back to this tool later. This will allow you to make changes to your ${ LawHelpMN_form_type } without starting over.
+
+  Below the **Continue** button, click "Sign in" if you have an account or "Sign up" to make one. You can also go to the
+  % if device().is_mobile:
+  :bars:
+  % endif
+  menu at the top of the screen and click "Sign in or sign up to save answers".
+
+  To go back to saved answers, make sure you are logged in. Then go to the menu at the top of the screen and select “My Forms.”
+continue button field: LawHelpMN_outro_saving_answers
+progress: 99
+
+############################ FINAL (DOWNLOAD) SCREEN #################################
+---
+## NOT SURE I NEED A CUSTOM SCREEN HERE?? NEED TO PONDER ON THIS ONE.. 
+id: DownloadScreen
+event: LawHelpMN_download
+question: |
+  Get your ${ LawHelpMN_form_type }
+subquestion: |
+  You can **view**, **download**, or **e-mail** your ${ LawHelpMN_form_type } to yourself below. Click the "✎ Review / Edit" button to fix any mistakes.
+    
+  <h2 class="h3">Download or e-mail your ${ LawHelpMN_form_type }</h2>
+
+  ${ action_button_html(url_action('review_full'), label='✎ Review / Edit', color='info') }
+  
+  ${ al_user_bundle.download_list_html() }
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
+progress: 100
+---
+# as needed, we can also use this to make it clear there may be a delay before download screen. Especially important if you go right from a substantive question to download screen.
+id: patience, assembling
+continue button field: LawHelpMN_patience_assembling
+question: |
+  Almost done
+subquestion: |
+  Click **${LawHelpMN_continue_button_label}** to complete your ${ LawHelpMN_form_type }. This may take a few minutes.
+
+  **Do not** refresh your screen. 
+progress: 99
+
+---
+# # # # # # # # # # # # # # # # # Snapshot Code # # # # # # # # # # # # # # # # # # # 
+code: |
+  store_variables_snapshot(
+  	data=stuff_to_snapshot, persistent=True
+  	)
+  snapshot_interview_state = True
+---
+code: |
+  stuff_to_snapshot = {
+  	'begin_time': str(current_datetime().format_datetime(format='yyyy-MM-dd h:mm a')),
+  	}
+  snapshot_interview_state
+  snapshot_start = True  
+---
+code: |
+  stuff_to_snapshot['zip'] = showifdef('users[0].address.zip')
+  stuff_to_snapshot['number_of_forms'] = len(al_court_bundle.enabled_documents())
+  stuff_to_snapshot['end_time'] = str(current_datetime().format_datetime(format='yyyy-MM-dd h:mm a'))
+  reconsider('snapshot_interview_state')
+  snapshot_download = True
+  
+---
+# # # # # # # # # # # # # Interview Down / Maintenance Message # # # # # # # # # # # #
+
+# Put this code at top of an interview if the interview needs to be taken down for a little while.
+# ---
+# id: interview under maintenance screen
+# mandatory: True
+# question: |
+# <i class="fa-solid fa-circle-exclamation fa-3x"></i>  Closed for Maintenance
+# subquestion: |  
+#   **This form is under maintenance.** Please check back soon.
+#  
+#   Do you need more help? You can:
+# 
+#   * [Use the Legal Guide](https://www.lawhelpmn.org/#main-container) to get free legal information or find a lawyer.
+#   * [Go to the Self Help Library](https://www.lawhelpmn.org/self-help-library) for Minnesota legal information.
+---
+#### DO I NEED TO OVERRIDE AL_VISUAL?? Might be able to remove this whole section ####
+
+### Share link in Footer ###
+comment: |
+  Overridden from `al_visual.yml` to turn off sms
+code: |
+  if al_how_share_link == 'email':
+    if al_sharing_type == "tell_friend":
+      success = send_email(to=share_interview_contact_method, template=al_tell_a_friend_message_template)
+    else:
+      success = send_email(to=share_interview_contact_method, template=al_share_answers_message_template)
+  al_did_share_form = True
+---
+continue button field: al_share_form_screen
+id: al share form screen
+question: |
+  Share this website
+fields:
+  - What do you want to do?: al_sharing_type
+    datatype: radio
+    choices:
+      - Tell a friend about this website: tell_friend
+        default: True
+#       - Share my answers and progress with someone: share_answers
+  - How do you want to share the link?: al_how_share_link
+    datatype: radio
+    choices:
+      - Email: email
+      - Just show me the link. I will share it myself.: link_only
+    js show if: |
+      val("al_sharing_type") === "tell_friend" || val("al_sharing_type") === "share_answers" 
+  - note: |
+      **Note**: the person you share this link with will be able to **see and
+      edit** your answers on this form.
+    js show if: |
+      val("al_sharing_type") === "share_answers" &&  ( val("al_how_share_link") === "email" || val("al_how_share_link") === "link_only" )
+  - note: |
+      You can copy and share this link
+      
+      ${ copy_button_html(  interview_url(i=user_info().filename, style="short", new_session=1), label=al_copy_button_label.show(), tooltip_inert_text=al_copy_button_tooltip_inert_text.show(), tooltip_copied_text = al_copy_button_tooltip_copied_text.show() ) }
+    js show if: |
+      val("al_sharing_type") === "tell_friend" && val("al_how_share_link") === "link_only"      
+  - note: |
+      You can copy and share this link (expires in 48 hours)
+      ${ copy_button_html( interview_url(temporary=48), label=al_copy_button_label.show(), tooltip_inert_text=al_copy_button_tooltip_inert_text.show(), tooltip_copied_text = al_copy_button_tooltip_copied_text.show()) }
+    js show if: |
+      val("al_sharing_type") === "share_answers" && val("al_how_share_link") === "link_only"
+  - Email you want to send this to: share_interview_contact_method
+    validate: |
+        lambda text: re.match("\S+@\S+", text)
+    show if:
+      variable: al_how_share_link
+      is: email
+  - Message: tell_a_friend_message
+    datatype: area
+    default: |
+      Hi, I wanted to let you know about a free website that I learned about:
+      "${single_paragraph(all_variables(special='metadata').get('title', AL_ORGANIZATION_TITLE))}". I think this might
+      help you, too. Check it out at the link in this message:       
+    js show if: |
+      val("al_how_share_link") === "email" && val("al_sharing_type") === "tell_friend"
+  - Message: share_interview_answers_message
+    datatype: area
+    default: |
+      Hi, I wanted to share my progress on a form on LawHelpMN.
+      If you click this link, you can follow along or finish the form for me.
+    js show if: |
+      val("al_how_share_link") === "email" && val("al_sharing_type") === "share_answers"      
+  - Your name: al_share_form_from_name
+    default: ${ str(users[0]) if defined('users[0].name.first') else '' } 
+    show if:
+      variable: al_how_share_link
+      is: email
+back button label: |
+  Back to your form
+---
+#### Overrides templates so they maintain newlines
+template: al_share_answers_message_template
+subject: |
+  ${ AL_ORGANIZATION_TITLE } from ${ al_share_form_from_name }
+content: |
+  ${ share_interview_answers_message.replace("\n", "<br>") }
+  Click the link below to view and edit ${ al_share_form_from_name }'s
+  progress so far:
+  
+  ${ interview_url(temporary=48) }
+---
+template: al_tell_a_friend_message_template
+subject: |
+  ${ al_share_form_from_name } wants to tell you about ${ AL_ORGANIZATION_TITLE }
+content: |
+  ${ tell_a_friend_message.replace("\n", "<br>") }
+  ${ interview_url(i=user_info().filename, style="short", new_session=1) }
+
+
+### About page in Footer ###
+---
+comment: |
+  Overrides About page from `al_visual.yml`
+template: about_this_interview_version_info
+content: |
+  % if all_variables(special='metadata').get('help_page_title','').rstrip() and all_variables(special='metadata').get('help_page_url','').rstrip():
+  To learn more about this legal topic, go to: [${ all_variables(special='metadata').get('help_page_title','').rstrip() }](${ all_variables(special='metadata').get('help_page_url','').rstrip() }).
+  % endif
+
+  % if interview_metadata.get("main_interview_key"):
+    <%
+      MAIN_METADATA = interview_metadata[interview_metadata["main_interview_key"]]
+    %>
+  % elif len(interview_metadata) > 1:    
+    <% 
+      del(interview_metadata["main_interview_key"]) # DADict creates the key on lookup above
+      MAIN_METADATA = next(iter(interview_metadata.values())) 
+    %>
+  % else:
+    <% MAIN_METADATA = all_variables(special='metadata') %>
+  % endif
+  <% ORIGINAL_FORMS = MAIN_METADATA.get("original_form", []) if isinstance(MAIN_METADATA.get("original_form"), list) else ([MAIN_METADATA.get("original_form", "")] if MAIN_METADATA.get("original_form") else []) %>
+
+  % if len(ORIGINAL_FORMS) > 1:
+  View the original version of this form at the links below:
+
+  % for url in [url for url in ORIGINAL_FORMS if url.strip() != "None" and url.startswith("http")]:
+  * [${ url }](${ url })
+  % endfor
+  % elif len(ORIGINAL_FORMS) == 1:
+  [View the original version of this form](${ ORIGINAL_FORMS[0] }).
+  % endif
+  
+  [LawHelpMN](https://www.lawhelpmn.org/about-us) made this free tool. The goal of the LawHelpMN website is to provide accurate and easy-to-understand legal information.
+
+  **Version Information:** "${all_variables(special='metadata').get('title','').rstrip()}" version `${ package_version_number }`. This tool also uses code from the Document Assembly Line Project, version `${ al_version }`.
+  
+###### REMOVE THE FOLLOWING?? #####
+# Removing the below for now because it's pulling up info from wrong github repo. See issue 174.
+#  % if package_updated_on:
+#    **Version Information:** "${all_variables(special='metadata').get('title','').rstrip()}" version `${ package_version_number }`; AssemblyLine version `${ al_version }`. Last updated on ${ package_updated_on }. [:fab-fa-github: View code on GitHub](${ github_url }).  
+#  % else:
+#  **Version Information:** "${all_variables(special='metadata').get('title','').rstrip()}" version `${ package_version_number }`. This tool also uses code from the Document Assembly Line Project, version `${ al_version }`.
+#  % endif

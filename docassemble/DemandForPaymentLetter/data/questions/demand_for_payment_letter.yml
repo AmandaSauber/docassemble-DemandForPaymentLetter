@@ -2,20 +2,32 @@
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.GithubFeedbackForm:embedded_review.yml
+#  - docassemble.LawHelpMNFramework:lawhelpmn_interview_framework.yml
 #---
 #modules:
 #  - docassemble.GithubFeedbackForm.github_issue
-#---
-#default screen parts:
+---
+default screen parts:  
+#  exit link: exit                    # sets behavior of Exit buttons
+#  exit url: https://www.lawhelpmn.org/
+#  right: |
+#    ✎ [Review / Edit Answers](${ url_action('review_full') })
+  under: |
+    % if not user_logged_in():
+    [:key: Sign in](${url_of('login', next=interview_url())}) or [sign up](${url_of('register', next=interview_url())}) to save your progress. You can use this program without signing in, but your information is NOT saved. You can't come back to it later.   
+    % endif
 #  footer: |
 #    [:comment-dots: Feedback](${ feedback_link(user_info(), github_repo="docassemble-DemandForPaymentLetter") } ){:target="_blank"}
 ---
+features:
+  bootstrap theme: LHBranding_bootstrap.min.css
+---
 metadata:
-  title: >-
+  title: |
     Demand for payment letter
-  short title: >-
+  short title: |
     Demand for payment letter 
-  description: |-
+  description: |
     Demand for payment letter
   before_you_start: |
     Before you get started, you need to...
@@ -90,6 +102,8 @@ code: |
   user_role = "na"
   user_ask_role = "na"
   set_progress(25)
+  demand_for_payment_letter_intro
+  #LawHelpMN_intro_landing
   users_name
   #users.gather()
   #set_parts(subtitle=str(users))
@@ -135,6 +149,19 @@ code: |
       },
   )
   demand_for_payment_letter_download
+
+#---
+#testing this - shouldn't need to add this snippet here since it's part of the framework but it's erroring.
+#id: LawHelpMN intro landing FirstScreen
+#question: |
+#  Demand for Payment Letter
+#  ${ LawHelpMN_interview_short_title }
+#subquestion: | 
+#  It will probably take about 5 to 10 minutes to answer all the questions.
+  
+#  Your personalized letter will be ready after you answer all the questions. 
+
+#continue button field: LawHelpMN_intro_landing
 ---
 id: Demand_for_payment_letter
 continue button field: demand_for_payment_letter_intro
