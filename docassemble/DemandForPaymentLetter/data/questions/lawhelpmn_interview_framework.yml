@@ -560,6 +560,8 @@ content: |
   % elif len(ORIGINAL_FORMS) == 1:
   [View the original version of this form](${ ORIGINAL_FORMS[0] }).
   % endif
+
+  To learn more about this legal topic, go to: [insert legal topic title](https://www.lawhelpmn.org/self-help-library/complete self-help topic url).
   
   [LawHelpMN](https://www.lawhelpmn.org/about-us) made this free tool. The goal of the LawHelpMN website is to provide accurate and easy-to-understand legal information.
 

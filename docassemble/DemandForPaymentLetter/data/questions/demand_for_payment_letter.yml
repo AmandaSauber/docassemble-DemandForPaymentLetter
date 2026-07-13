@@ -7,6 +7,46 @@ include:
 #modules:
 #  - docassemble.GithubFeedbackForm.github_issue
 ---
+### About page in Footer ###
+---
+comment: |
+  Overrides About page from `al_visual.yml`
+template: about_this_interview_version_info
+content: |
+  % if all_variables(special='metadata').get('help_page_title','').rstrip() and all_variables(special='metadata').get('help_page_url','').rstrip():
+  To learn more about this legal topic, go to: [${ all_variables(special='metadata').get('help_page_title','').rstrip() }](${ all_variables(special='metadata').get('help_page_url','').rstrip() }).
+  % endif
+
+  % if interview_metadata.get("main_interview_key"):
+    <%
+      MAIN_METADATA = interview_metadata[interview_metadata["main_interview_key"]]
+    %>
+  % elif len(interview_metadata) > 1:    
+    <% 
+      del(interview_metadata["main_interview_key"]) # DADict creates the key on lookup above
+      MAIN_METADATA = next(iter(interview_metadata.values())) 
+    %>
+  % else:
+    <% MAIN_METADATA = all_variables(special='metadata') %>
+  % endif
+  <% ORIGINAL_FORMS = MAIN_METADATA.get("original_form", []) if isinstance(MAIN_METADATA.get("original_form"), list) else ([MAIN_METADATA.get("original_form", "")] if MAIN_METADATA.get("original_form") else []) %>
+
+  % if len(ORIGINAL_FORMS) > 1:
+  View the original version of this form at the links below:
+
+  % for url in [url for url in ORIGINAL_FORMS if url.strip() != "None" and url.startswith("http")]:
+  * [${ url }](${ url })
+  % endfor
+  % elif len(ORIGINAL_FORMS) == 1:
+  [View the original version of this form](${ ORIGINAL_FORMS[0] }).
+  % endif
+
+  To learn more about this legal topic, go to: [Conciliation Court and Collecting Money](https://www.lawhelpmn.org/self-help-library/money-debt-taxes/conciliation-court-and-collecting-money).
+  
+  [LawHelpMN](https://www.lawhelpmn.org/about-us) made this free tool. The goal of the LawHelpMN website is to provide accurate and easy-to-understand legal information.
+
+  **Version Information:** "${all_variables(special='metadata').get('title','').rstrip()}" version `${ package_version_number }`. This tool also uses code from the Document Assembly Line Project, version `${ al_version }`.
+---
 default screen parts:  
 #  exit link: exit                    # sets behavior of Exit buttons
 #  exit url: https://www.lawhelpmn.org/
