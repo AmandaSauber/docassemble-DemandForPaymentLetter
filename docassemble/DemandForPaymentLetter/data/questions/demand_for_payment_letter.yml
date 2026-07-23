@@ -43,7 +43,7 @@ content: |
 
   To learn more about this legal topic, go to: [Conciliation Court and Collecting Money](https://www.lawhelpmn.org/self-help-library/money-debt-taxes/conciliation-court-and-collecting-money).
   
-  [LawHelpMN](https://www.lawhelpmn.org/about-us) made this free tool. The goal of the LawHelpMN website is to provide accurate and easy-to-understand legal information.
+  [LawHelpMN](https://www.lawhelpmn.org/about-us) made this free tool. The goal of the LawHelpMN website is to provide accurate and easy-to-understand legal information. LawHelpMN is maintained by [Legal Services State Support](https://www.mnlegalservices.org/), which is non-profit that works to improve understanding and access to the civil legal justice system for all Minnesotans.
 
   **Version Information:** "${all_variables(special='metadata').get('title','').rstrip()}" version `${ package_version_number }`. This tool also uses code from the Document Assembly Line Project, version `${ al_version }`.
 ---
@@ -60,7 +60,7 @@ default screen parts:
 #    [:comment-dots: Feedback](${ feedback_link(user_info(), github_repo="docassemble-DemandForPaymentLetter") } ){:target="_blank"}
 ---
 features:
-  bootstrap theme: LHBranding_bootstrap.min.css
+  bootstrap theme: docassemble.BrandingMN:data/static/LHBranding_bootstrap.min.css
 ---
 metadata:
   title: |
@@ -203,12 +203,42 @@ code: |
 
 #continue button field: LawHelpMN_intro_landing
 ---
+# customize this page and update terms of use link
+id: basic questions intro screen
+question: |
+  ${interview_short_title}: ${ AL_ORGANIZATION_TITLE}
+subquestion: |
+  ${ AL_ORGANIZATION_TITLE } can help you complete and download forms in 3 steps:
+  
+  Step 1. Answer questions that will fill in your form for you.<br>
+  Step 2. Preview the completed form.<br>
+  Step 3. Download and print the final form. You will need to deliver it on your own.
+
+  
+  This site is not a lawyer. If you would like a lawyer, find [your local
+  legal aid provider](https://www.lawhelpmn.org/providers-and-clinics).
+  
+fields:
+  - note: |
+      ${ display_template(al_terms_of_use, scrollable=True) }
+      To continue, you must accept our terms of use
+  - I accept the terms of use: acknowledged_information_use
+    datatype: yesnowide
+    grid: 8
+continue button field: al_intro_screen
+validation code: |
+  if not acknowledged_information_use:
+    validation_error(
+      "You must accept the terms of use to continue.",
+      field="acknowledged_information_use",
+    )
+---
 id: Demand_for_payment_letter
 continue button field: demand_for_payment_letter_intro
 question: |
   Demand for payment letter
 subquestion: |
-  If someone owes you money and has not paid you back, use this interview to create a "demand letter" that says they must pay you the money they owe. 
+  If someone owes you money and has not paid you, use this interview to create a "demand letter" that says they must pay you the money they owe. 
   
   Sending a demand letter is usually a good step to take before filing a Conciliation Court case. For more information, see the <a href="https://www.lawhelpmn.org/self-help-library/fact-sheet/conciliation-court" title="https://www.lawhelpmn.org/self-help-library/fact-sheet/conciliation-court">Conciliation Court fact sheet</a> on <a href="https://www.lawhelpmn.org/", title="https://www.lawhelpmn.org/">LawHelpMN.org</a>. 
   
@@ -317,9 +347,12 @@ subquestion: |
   - If you loaned them money, on what date did you loan them money?  
   - If they agreed to pay you for your services, when did you complete the work? 
   - If they damaged your property, when did the damage happen? 
+
+  Give your best estimated date if you do not know an exact date.
 fields:
   - "Date": date_of_loan
     datatype: date
+    max: ${ today().minus(days=1) }
 Section: Loan Information
 ---
 id: Amount owed
@@ -328,7 +361,6 @@ question: |
 fields:
   - "no label": amount_owed
     datatype: currency
-    min: 0
 Section: Loan Information
 ---
 id: description of loan
@@ -337,7 +369,7 @@ question: |
 subquestion: |
   Write the description so it makes sense in this sentence: 
 
-  You owe me ${ currency(amount_owed) } because on ${ date_of_loan }, **your description___.**  
+  You owe me ${ currency(amount_owed) } because on or about ${ date_of_loan }, **your description___.**  
 fields:
   - "no label": description_of_loan
     input type: area
@@ -354,6 +386,7 @@ fields:
       - No
   - "Promised payment date": payback_date
     datatype: date
+    max: ${ today().minus(days=1) }
     show if:
       variable: payback_agreement
       is: Yes
@@ -365,10 +398,15 @@ question: |
 fields:
   - "Payment due date": payment_demand_date
     datatype: date
-    #label above field: True
-  - "Payment method": payment_method
-    hint: e.g. by money order OR check, etc.
-    #label above field: True
+    min: ${ today() }
+    label above field: True
+  - "Payment and delivery method": payment_method
+    hint: e.g. by money order mailed to my address above
+    label above field: True
+    help: |
+      Note what form of payment you want to receive (check, money order, etc.), in addition to how you want to receive that payment (mailed to your address listed, another address, etc.)
+#  - "Delivery method": delivery_method
+#    hint: e.g. mailed to my address above
 Section: Loan Information
 ---
 id: Other parties address address
@@ -530,31 +568,23 @@ progress: 100
 ---
 # ALDocument objects specify the metadata for each template
 objects:
-  - demand_for_payment_letter_Post_interview_instructions: ALDocument.using(title="Instructions", filename="demand_for_payment_letter_next_steps.docx", enabled=True, has_addendum=False)
-  - demand_for_payment_letter_attachment: ALDocument.using(title="Demand for payment letter", filename="Demand_for_Payment_letter_FINAL.docx", enabled=True, has_addendum=False, )
+  - demand_for_payment_letter_attachment: ALDocument.using(title="Demand for payment letter", filename="Demand_for_Payment_letter_FINAL_1.docx", enabled=True, has_addendum=False, )
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[demand_for_payment_letter_Post_interview_instructions, demand_for_payment_letter_attachment], filename="Demand_for_Payment_letter_FINAL.docx", title="All forms to download for your records", enabled=True)
-  - al_recipient_bundle: ALDocumentBundle.using(elements=[demand_for_payment_letter_attachment],  filename="Demand_for_Payment_letter_FINAL.docx", title="All forms to file", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[demand_for_payment_letter_attachment], filename="Demand_for_Payment_letter_FINAL_1.docx", title="All forms to download for your records", enabled=True)
+  - al_recipient_bundle: ALDocumentBundle.using(elements=[demand_for_payment_letter_attachment],  filename="Demand_for_Payment_letter_FINAL_1.docx", title="All forms to file", enabled=True)
 ---
 # Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
 # used for "preview" and "final" keys, and logic in the template checks the value of 
 # `i` to show or hide the user's signature
-attachment:
-  name: Post-interview-Instructions
-  filename: demand_for_payment_letter_next_steps
-  docx template file: demand_for_payment_letter_final_next_steps.docx
-  variable name: demand_for_payment_letter_Post_interview_instructions[i]
-  skip undefined: True
-  tagged pdf: True
 ---
 attachment:
   name: demand for payment letter 
   filename: demand_for_payment_letter
   variable name: demand_for_payment_letter_attachment[i]
   skip undefined: True
-  docx template file: Demand_for_Payment_letter_FINAL.docx
+  docx template file: Demand_for_Payment_letter_FINAL_1.docx
   tagged pdf: True
   fields:
     - user: ${ users[0] }

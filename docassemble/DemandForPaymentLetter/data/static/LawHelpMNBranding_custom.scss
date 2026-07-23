@@ -1,0 +1,102 @@
+
+/* ==========================================================================
+   LawHelp Minnesota Theme
+   bootstrap.build configuration
+   Source: LawHelp-MN Brand Reference
+   ========================================================================== */
+
+/* Brand Colors */
+$lh-teal:      #0d7d9c;
+$lh-green:     #518302;
+$lh-orange:    #c25700;
+$lh-ink:       #2e2a25;
+$lh-rule:      #363f3b;
+$lh-tint:      #e3e8e8;
+$lh-offwhite:  #f2f2f2;
+$lh-danger:    #dd241b;
+
+/* Bootstrap Theme Mapping */
+$primary:      $lh-teal;
+$secondary:    $lh-green;
+$success:      $lh-green;
+$danger:       $lh-danger;
+$dark:         $lh-rule;
+$light:        $lh-offwhite;
+
+/* Body */
+$body-bg:      #ffffff;
+$body-color:   $lh-ink;
+
+/* Typography */
+$font-family-sans-serif: "Montserrat", sans-serif;
+$font-size-base: 1.125rem;          // 18px
+$line-height-base: 1.4;
+
+$headings-font-family: "Montserrat", sans-serif;
+$headings-font-weight: 700;
+$headings-line-height: 1.15;
+$headings-color: $lh-ink;
+
+$h1-font-size: 2.5rem;             // 40px
+$h2-font-size: 2rem;               // 32px
+$h3-font-size: 1.625rem;           // 26px
+$h4-font-size: 1.5rem;             // 24px
+$h5-font-size: 1.4375rem;          // 23px
+$h6-font-size: 1.25rem;            // 20px
+
+/* Links */
+$link-color: $lh-teal;
+$link-hover-color: $lh-orange;
+$link-decoration: none;
+
+/* Borders & Radius */
+$border-color: $lh-rule;
+$border-radius: 0;
+$border-radius-sm: 0;
+$border-radius-lg: 0;
+$border-radius-xl: 0;
+$border-radius-2xl: 0;
+$border-radius-pill: 0;
+
+/* Buttons */
+$btn-font-weight: 700;
+$btn-font-size: 1.25rem;           // 20px
+$btn-padding-y: .75em;
+$btn-padding-x: 3em;
+$btn-border-radius: 0;
+
+/* Forms */
+$input-border-color: $lh-rule;
+$input-color: #0c5781;
+$input-border-radius: 0;
+$input-btn-focus-box-shadow: none;
+$input-box-shadow: none;
+$form-select-border-radius: 0;
+
+/* Cards */
+$card-border-radius: 0;
+$card-border-color: $lh-rule;
+$card-bg: #ffffff;
+
+/* Tables */
+$table-border-color: $lh-rule;
+$table-striped-bg: $lh-tint;
+
+/* Pagination */
+$pagination-border-radius: 0;
+
+/* Alerts */
+$alert-border-radius: 0;
+
+/* Modals */
+$modal-content-border-radius: 0;
+
+/* Accordions */
+$accordion-border-radius: 0;
+$accordion-button-active-bg: #ffffff;
+$accordion-button-active-color: $lh-ink;
+
+/* Navbar */
+$navbar-light-color: $lh-ink;
+$navbar-light-hover-color: $lh-teal;
+$navbar-light-active-color: $lh-teal;

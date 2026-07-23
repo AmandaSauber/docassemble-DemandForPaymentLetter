@@ -24,6 +24,7 @@ modules:
 ---
 features:
   bootstrap theme: LHBranding_bootstrap.min.css
+  # the bootstrap is only needed as a 'feature' in the dev server. this package is global in the config file in the prod server. 
   progress bar: True
   show progress bar percentage: True
   progress bar method: default
@@ -560,10 +561,8 @@ content: |
   % elif len(ORIGINAL_FORMS) == 1:
   [View the original version of this form](${ ORIGINAL_FORMS[0] }).
   % endif
-
-  To learn more about this legal topic, go to: [insert legal topic title](https://www.lawhelpmn.org/self-help-library/complete self-help topic url).
   
-  [LawHelpMN](https://www.lawhelpmn.org/about-us) made this free tool. The goal of the LawHelpMN website is to provide accurate and easy-to-understand legal information.
+  [LawHelpMN](https://www.lawhelpmn.org/about-us) made this free tool. The goal of the LawHelpMN website is to provide accurate and easy-to-understand legal information. LawHelpMN is maintained by [Legal Services State Support](https://www.mnlegalservices.org/), which is non-profit that works to improve understanding and access to the civil legal justice system for all Minnesotans.
 
   **Version Information:** "${all_variables(special='metadata').get('title','').rstrip()}" version `${ package_version_number }`. This tool also uses code from the Document Assembly Line Project, version `${ al_version }`.
   
