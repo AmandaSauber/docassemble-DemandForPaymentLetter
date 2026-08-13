@@ -13,7 +13,7 @@ authors = [
     { name = "Court Forms Online", email = "alsauber@mnlegalservices.org" },
 ]
 dependencies = [
-    "docassemble.AssemblyLine @ git+https://github.com/SuffolkLITLab/docassemble-AssemblyLine.git@main",
+    "docassemble.AssemblyLine @ git+https://github.com/SuffolkLITLab/docassemble-AssemblyLine.git@fix_session_query",
     "docassemble.GithubFeedbackForm @ git+https://github.com/SuffolkLITLab/docassemble-GithubFeedbackForm.git@main",
 ]
 

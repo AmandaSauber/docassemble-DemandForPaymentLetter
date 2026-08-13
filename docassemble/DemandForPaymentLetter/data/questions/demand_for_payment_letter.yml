@@ -60,7 +60,7 @@ default screen parts:
 #    [:comment-dots: Feedback](${ feedback_link(user_info(), github_repo="docassemble-DemandForPaymentLetter") } ){:target="_blank"}
 ---
 features:
-  bootstrap theme: docassemble.BrandingMN:data/static/LHBranding_bootstrap.min.css
+  bootstrap theme: docassemble.BrandingMN:data/static/LawHelpMNBranding_custom.css
 ---
 metadata:
   title: |
