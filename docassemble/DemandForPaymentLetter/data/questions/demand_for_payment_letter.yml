@@ -569,7 +569,7 @@ subquestion: |
   
   View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
 
-  ${ action_button_html(url_action('review_demand_for_payment_letter'), label='Edit answers', color='info') }
+  ${ action_button_html(url_action('review_demand_for_payment_letter'), label=':edit: Edit answers', color='warning') }
   
   
   ${ al_user_bundle.download_list_html() }
