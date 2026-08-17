@@ -47,6 +47,15 @@ content: |
 
   **Version Information:** "${all_variables(special='metadata').get('title','').rstrip()}" version `${ package_version_number }`. This tool also uses code from the Document Assembly Line Project, version `${ al_version }`.
 ---
+template: amount_owed_conciliation_court_limits
+subject: What to know about Conciliation Court limits
+content: |
+  Conciliation Court is sometimes called “People’s Court” or “Small Claims Court.” It is for simple court cases for disputes of up to $20,000. 
+  
+  If you want to sue [opposing party name] in conciliation court, you can still demand any amount of money in this letter. You can sue them for less money than what you demand in this letter.
+
+  See our <a href="https://www.lawhelpmn.org/self-help-library/fact-sheet/conciliation-court" title="https://www.lawhelpmn.org/self-help-library/fact-sheet/conciliation-court">Conciliation Court fact sheet</a> for more information. 
+---
 default screen parts:  
 #  exit link: exit                    # sets behavior of Exit buttons
 #  exit url: https://www.lawhelpmn.org/
@@ -60,7 +69,9 @@ default screen parts:
 #    [:comment-dots: Feedback](${ feedback_link(user_info(), github_repo="docassemble-DemandForPaymentLetter") } ){:target="_blank"}
 ---
 features:
-  bootstrap theme: docassemble.BrandingMN:data/static/LawHelpMNBranding_custom.css
+  bootstrap theme: LawHelpMNBranding_custom.css
+  labels above fields: True
+#  bootstrap theme: docassemble.LawHelpMNBranding:data/static/LawHelpMNBranding_custom.css
 ---
 metadata:
   title: |
@@ -278,7 +289,7 @@ id: user phone number
 question: |
   What is your phone number?
 fields:  
-  - Phone number: users[0].phone_number
+  - "no label": users[0].phone_number
 
 validation code: |
   import re
@@ -301,7 +312,7 @@ id: user email address
 question: |
   What is your email address?
 fields:
-  - Email address: users[0].email
+  - "no label": users[0].email
     required: False
 section: Email Address
 ---
@@ -350,7 +361,7 @@ subquestion: |
 
   Give your best estimated date if you do not know an exact date.
 fields:
-  - "Date": date_of_loan
+  - "no label": date_of_loan
     datatype: date
     max: ${ today().minus(days=1) }
 Section: Loan Information
@@ -358,6 +369,8 @@ Section: Loan Information
 id: Amount owed
 question: |
   What amount does ${ other_parties[0].name.first } owe you?
+subquestion: |
+  ${ collapse_template(amount_owed_conciliation_court_limits) }
 fields:
   - "no label": amount_owed
     datatype: currency
