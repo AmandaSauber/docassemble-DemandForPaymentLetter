@@ -47,6 +47,112 @@ content: |
 
   **Version Information:** "${all_variables(special='metadata').get('title','').rstrip()}" version `${ package_version_number }`. This tool also uses code from the Document Assembly Line Project, version `${ al_version }`.
 ---
+template: LawHelpMN_terms_of_use
+subject: |
+  <b>Legal Services State Support (LSSS)’s Terms of Use</b>
+content: |
+  The website, <a href="http://www.docs.lawhelpmn.org" title="http://www.docs.lawhelpmn.org">LawHelpMN Forms</a>, is free to use. Legal Services State Support (LSSS) created and maintains this site. LSSS is a nonprofit organization that hosts <a href="https://www.lawhelpmn.org/" title="https://www.lawhelpmn.org/">LawHelpMN.org</a>, a legal information and referral website for low-income Minnesotans with civil legal issues. 
+  
+  When you use this website you agree to all of the terms listed below. Please read them carefully. If you do not agree to these terms of use, do not use this site. LSSS can cancel your account at any time if you do not follow these Terms of Use. 
+
+  <b>1. No Lawyer-Client Relationship</b>
+  
+  * This site provides legal information and forms to help people solve legal problems in Minnesota. It does not give legal advice. It does not tell you if your answers are legally sufficient or tell you about all possible defenses, choices, or outcomes.  There is no lawyer review of any forms you make using this site. 
+
+  * You are not a client of LSSS or MMLA. LSSS and MMLA lawyers can still work for other people. This is true even if their case is against you.
+
+  * Do you have questions about your legal rights? Contact a <a href="https://www.lawhelpmn.org/providers-and-clinics" title="https://www.lawhelpmn.org/providers-and-clinics">lawyer</a>.
+
+  <b>2.	Release of Liability</b>
+
+    * LSSS offers the information and content on this site for informational purposes only. Laws and local rules can change. We do our best to make sure the information and forms on this website are accurate. But, we do not guarantee that the information and forms on this website are always:
+
+      * Available; 
+      * Correct;
+      * Up-to-date; 
+      * Reliable;
+      * Free of viruses or other defects; or 
+      * That any problems or inaccuracies will be corrected. 
+  
+      When you use this site, it is at your own risk.
+
+    * You do not have the right to make a claim that you were harmed because you used this website. LSSS is not responsible for any loss, injury, claim, liability, or damage related to:
+  
+      * The hardware or software you use to access this site;
+      * Your use of this site or its content, or your decision to count on any information you got from this website;
+      * Any errors or omissions in the content on this site or other sites you are directed to from this site; or
+  - The unavailability of this site or its content.
+
+  <b>3.	Who can use this site and how it can be used</b>
+
+    * You need to be 18 years old or older to use this site.
+
+    * Unless you are a lawyer, use of this site is for your own personal use.  Use of this site to represent or provide legal advice to others is strictly prohibited.   
+
+    * Do not sell, reproduce, copy, change, publish, display, or distribute any part of this website, except as allowed by the terms of this agreement. 
+
+    * You must not use this site in any way that Minnesota law, U.S. law, or the laws of your state define as illegal.
+
+    * Do <u>not</u> use this website to:
+      * upload content that:
+          * Is illegal;
+          * Would illegally invade someone else’s privacy; 
+          * The purpose is to harm, threaten, abuse, harass, or defame someone; 
+          * The purpose is to be vulgar, obscene, hateful, or racially or ethnically offensive; 
+          * Is wrongful is some other way
+          * You do not have a right to share proprietary and confidential information learned or disclosed as part of employment relationships or under nondisclosure agreements; or
+          * Infringes, misappropriates, or in any way violates a party’s patent, trademark, trade secret, copyright or other proprietary rights
+
+      * Harm a child in any way
+
+      * Misrepresent your relationship with a person or agency or impersonate a person or agency, including LSSS or its staff.
+
+      * Stalk or harass someone
+
+    * LSSS may investigate complaints and reported violations. If we suspect illegal or inappropriate activity, we may report it to law enforcement officials, regulators, or other parties. We may disclose user information of anyone, or any entity involved in that activity, including, but not limited to: user profiles, e-mail addresses, usage history, posted materials, IP addresses, and traffic information.
+
+  <b>4.	Your Privacy</b>
+
+    * The <a href="https://www.lawhelpmn.org/privacy-policy" title="https://www.lawhelpmn.org/privacy-policy">LawHelpMN privacy policy</a> applies to this site.
+
+    * You have the option to create an account for this site. If you choose to create an account, you must provide your first and last name, and a valid e-mail address. You are also required to create a password. Passwords must be at least six characters long and contain at least one lower case letter, at least one upper case letter, and at least one number.  
+  
+    * When creating and using an account on this site, you agree to:
+
+        * Not let anyone else use your account to access this site;
+        * Be responsible for anyone who accesses the site with your user information; and
+        * Protect your user information so that others can’t use it.
+
+    * <b>Protect Your Password:</b> Do not use your name, birthday, a single word, or other information that is easy to guess. Instead, use a string of letters and numbers or a phrase. 
+
+    * Do not use this website to collect or store personal data about **other users** unless the other user(s) have given you permission, or it is necessary to complete the form you are working on.
+
+    * Information that you type will be saved for 90 days for logged-in users. We delete all information 90 days after you last update it. You can also delete information immediately. We log information including IP addresses and web browsers from all visitors. We use this information to keep our site secure. We keep logs for up to 90 days.
+
+    * <b>We never sell your information.</b> We share anonymous information with a small number of nonprofit legal services providers, researchers, courts, and funders. We use the information to improve our site and to improve free legal help in Minnesota. 
+
+  <b>5.	Keeping your information secure</b>
+
+    * We use the same technology that banks and online stores use to keep your information safe. We use:
+  
+      * 256 bit encryption
+      * Continual monitoring
+      * Limited access controls
+      * Regular security updates
+      * Software firewalls
+
+  <b>6.	These terms of use can change</b>
+
+    * We may change these Terms of Use at any time with no notice. Please review the terms on a regular basis to see any changes. We always include a last updated date so that you know when these Terms of Use were last updated.
+
+    * If you use the site after we make changes, you accept our changed Terms of Use.
+
+  <b>7. The laws of Minnesota apply to these Terms of Use.</b>
+
+  <b>8.	No Technical Support</b>
+
+  If you have problems using this website, use the Feedback form found in the footer to tell us about the issue. We can’t guarantee we will be able to resolve all technical issues. We appreciate you telling us about any errors or problems. 
+---
 template: amount_owed_conciliation_court_limits
 subject: What to know about Conciliation Court limits
 content: |
@@ -231,7 +337,7 @@ subquestion: |
   
 fields:
   - note: |
-      ${ display_template(al_terms_of_use, scrollable=True) }
+      ${ display_template(LawHelpMN_terms_of_use, scrollable=True) }
       To continue, you must accept our terms of use
   - I accept the terms of use: acknowledged_information_use
     datatype: yesnowide
